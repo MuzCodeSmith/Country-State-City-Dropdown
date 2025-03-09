@@ -17,9 +17,11 @@
     <br>
     <div class="form-group mb-3">
         <select id="state-dd" class="form-control">
-            <option value="">Select States</option>
-
         </select>
+    </div>
+    <br>
+    <div class="form-group mb-3">
+        <select id="city-dd" class="form-control"></select>
     </div>
     <br>
     <button type="submit">Add User</button>
@@ -34,18 +36,35 @@
             $('#state-dd').html('');
 
             $.ajax({
-            url: "/api/fetch-state",
+                url: "/api/fetch-state",
+                type: 'POST',
+                dataType: 'json',
+                data: {country_id: idCountry,_token:"{{ csrf_token() }}"},
+                success:function(response){
+                    $('#state-dd').html('<option value="">Select State</option>');
+                    $.each(response.states,function(index, val){
+                    $('#state-dd').append('<option value="'+val.id+'"> '+val.name+' </option>')
+                    });
+                    $('#city-dd').html('<option value="">Select City</option>');
+                }
+            })
+
+            $('#state-dd').change(function(event) {
+            var idState = this.value;
+            $('#city-dd').html('');
+            $.ajax({
+            url: "/api/fetch-cities",
             type: 'POST',
             dataType: 'json',
-            data: {country_id: idCountry,_token:"{{ csrf_token() }}"},
+            data: {state_id: idState,_token:"{{ csrf_token() }}"},
             success:function(response){
-                $('#state-dd').html('<option value="">Select State</option>');
-                $.each(response.states,function(index, val){
-                $('#state-dd').append('<option value="'+val.id+'"> '+val.name+' </option>')
+                $('#city-dd').html('<option value="">Select State</option>');
+                $.each(response.cities,function(index, val){
+                $('#city-dd').append('<option value="'+val.id+'"> '+val.name+' </option>')
                 });
-                $('#city-dd').html('<option value="">Select City</option>');
             }
             })
+        });
 
 
             })

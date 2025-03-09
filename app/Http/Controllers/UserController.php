@@ -37,4 +37,8 @@ class UserController extends Controller
         $data['states'] = State::where('country_id',$request->country_id)->get(['name','id']);
         return response()->json($data);
     }
+    function fetchCities(Request $request){
+        $data['cities'] = City::where('state_id',$request->state_id)->get(['name','id']);
+        return response()->json($data);
+    }
 }
