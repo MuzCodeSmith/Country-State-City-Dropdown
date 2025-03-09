@@ -1,26 +1,27 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class State extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'email', 'country_id', 'state_id', 'city_id'];
+    protected $fillable = ['name', 'country_id'];
 
     public function country()
     {
         return $this->belongsTo(Country::class);
     }
 
-    public function state()
+    public function cities()
     {
-        return $this->belongsTo(State::class);
+        return $this->hasMany(City::class);
     }
 
-    public function city()
+    public function users()
     {
-        return $this->belongsTo(City::class);
+        return $this->hasMany(User::class);
     }
 }
