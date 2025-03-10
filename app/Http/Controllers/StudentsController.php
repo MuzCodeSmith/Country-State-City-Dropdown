@@ -13,7 +13,7 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        //
+        return view('add-more');
     }
 
     /**
@@ -29,7 +29,19 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'inputs.*.name'=>'required'
+        ],
+        [
+            'inputs.*.name'  => 'the Name field is required!',
+        ]
+    );
+
+        foreach($request->inputs as $key => $value){
+            Students::create($value);
+        }
+
+        return back()->with('success','the post have been added!');
     }
 
     /**
